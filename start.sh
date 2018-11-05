@@ -12,7 +12,6 @@ if [ ! -f /usr/bin/docker ]; then
     apt-cache policy docker-ce
     sudo apt-get install -y docker-ce
     sudo usermod -aG docker ${USER}
-
 else
     echo "Docker CE already installed.  Skipping..."
 fi
@@ -20,9 +19,8 @@ fi
 # Installing Docker Compose
 if [ ! -f /usr/bin/docker-compose ]; then
     echo 'Installing Docker Compose'
-    # Install Docker Compose from the Debian-based distributions repository
-    sudo apt-get install -y docker-compose
-
+    sudo curl -L https://github.com/docker/compose/releases/download/1.23.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
 else
     echo "Docker Compose already installed.  Skipping..."
 fi
