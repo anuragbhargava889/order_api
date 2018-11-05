@@ -14,7 +14,7 @@ const orderSchema = new Schema({
 orderSchema.plugin(mongoosePaginate);
 
 /**
- *
+ * Hook After Order Save
  */
 orderSchema.post('save', function (error, doc, next) {
   if (error.name === 'MongoError' && error.code === 11000) {
@@ -76,7 +76,7 @@ exports.createOrder = async (orderData) => {
     const distance = await getDistance(origin, destination);
     console.log(distance.rows[0].elements[0].distance.text);
     orderData.distance = distance.rows[0].elements[0].distance.text;
-    order = new Order(orderData);
+    let order = new Order(orderData);
     return order.save();
   } catch (err) {
     return Promise.reject(err);
@@ -105,12 +105,21 @@ exports.list = (perPage, page) => {
  */
 exports.updateOrder = (id, orderData) => {
   try {
-    if (mongoose.Types.ObjectId.isValid(id)) {
-      return Order.findByIdAndUpdate(id, orderData, {new: true, runValidators: true});
-    } else {
-      return Promise.reject({message: 'Order ID not found.'});
-    }
+    return Order.findByIdAndUpdate(id, orderData, {new: true, runValidators: true});
   } catch (err) {
     return Promise.reject(err);
+  }
+};
+
+/**
+ *
+ * @param id
+ * @returns {*}
+ */
+exports.findOrderByID = (id) => {
+  try {
+    return Order.findOne({_id: id}, 'status');
+  } catch (err) {
+    console.log(err)
   }
 };

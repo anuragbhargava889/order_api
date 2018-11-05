@@ -13,6 +13,7 @@ exports.routesConfig = function (app) {
   ]);
 
   app.patch('/orders/:orderId', [
+    ValidationMiddleware.raceCondition,
     UsersController.patchById
   ]);
 };

@@ -9,7 +9,7 @@ const OrderModel = require('../models/orders.model');
 exports.insert = (req, res, next) => {
   OrderModel.createOrder(req.body)
     .then((result) => {
-      res.status(201).send({id: result._id});
+      res.status(201).send({id: result._id, status: result.status});
     })
     .catch((err) => {
       res.status(500).send({
@@ -47,21 +47,6 @@ exports.list = (req, res, next) => {
  * @returns {*}
  */
 exports.patchById = (req, res, next) => {
-  console.log(req.body);
-  if (!req.params.orderId) {
-    return res.status(400).send({
-      err: "Order ID can not be empty"
-    });
-  }
-
-  OrderModel.findById(req.params.orderId).then((results) => {
-    if (results.status === 'TAKEN') {
-      res.status(500).send({
-        err: "ORDER ALREADY TAKEN"
-      });
-    }
-  });
-
   OrderModel.updateOrder(req.params.orderId, req.body)
     .then((result) => {
       res.status(200).send({status: result.status});

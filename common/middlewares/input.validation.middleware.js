@@ -1,5 +1,6 @@
 const isCoordinates = require('is-coordinates');
 const isValidCoordinates = require('is-valid-coordinates');
+const OrderModel = require('../../orders/models/orders.model');
 
 exports.verifyIsCoordinates = (req, res, next) => {
   if ((isCoordinates(req.body.origin) && (isCoordinates(req.body.destination)))) {
@@ -19,4 +20,21 @@ exports.verifyIsValidCoordinates = (req, res, next) => {
   } else {
     return res.status(400).send({err: 'Origin and destination should be valid lat long.'});
   }
+};
+
+exports.raceCondition = (req, res, next) => {
+  if (!req.params.orderId) {
+    return res.status(400).send({err: "Order ID can not be empty"});
+  }
+  let query = OrderModel.findOrderByID(req.params.orderId);
+
+  query.then(function (reuslt) {
+    if (reuslt.status === 'TAKEN') {
+      return res.status(400).send({err: 'Order already taken.'});
+    } else {
+      return next();
+    }
+  }).catch(function (err) {
+    return res.status(400).send({err: 'Order ID Not Found.'});
+  });
 };

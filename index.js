@@ -8,11 +8,16 @@ const mongoosePaginate = require('mongoose-paginate');
 const HTTP_SERVER_ERROR = 500;
 mongoose.set('debug', true);
 
-// configuration ===============================================================
+// connect to our database
 mongoose.connect(config.url, {
-  useMongoClient: true
-}); // connect to our database
-console.log(`${config.app_name} successfully connected to database.`);
+  autoIndex: false,
+  useNewUrlParser: true
+}).then((result) => {
+  console.log(`${config.app_name} successfully connected to database.`);
+}).catch((err) => {
+  console.log(err);
+  process.exit(1);
+});
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
