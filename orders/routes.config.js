@@ -1,19 +1,19 @@
-const UsersController = require('./controllers/orders.controller');
-const ValidationMiddleware = require('../common/middlewares/input.validation.middleware');
+const OrderController = require('./controllers/orders.controller');
+const ValidationMiddleware = require('./middlewares/validation.middleware');
 
 exports.routesConfig = function (app) {
   app.post('/orders', [
-    ValidationMiddleware.verifyIsCoordinates,
-    ValidationMiddleware.verifyIsValidCoordinates,
-    UsersController.insert
+    ValidationMiddleware.verifyCreateOrderSchema,
+    OrderController.insert,
   ]);
 
   app.get('/orders', [
-    UsersController.list
+    OrderController.list
   ]);
 
   app.patch('/orders/:orderId', [
+    ValidationMiddleware.verifyUpdateOrderSchema,
     ValidationMiddleware.raceCondition,
-    UsersController.patchById
+    OrderController.patchById
   ]);
 };

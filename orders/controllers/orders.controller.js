@@ -1,59 +1,79 @@
 const OrderModel = require('../models/orders.model');
 
 /**
+ * Create New Order
  *
  * @param req
  * @param res
  * @param next
  */
-exports.insert = (req, res, next) => {
+insert = (req, res, next) => {
   OrderModel.createOrder(req.body)
     .then((result) => {
-      res.status(201).send({id: result._id, status: result.status});
+      res.status(201).send(
+        {
+          id: result._id,
+          distance: result.distance,
+          status: result.status
+        });
     })
-    .catch((err) => {
-      res.status(500).send({
-        err: err.message || "Some error occurred while creating the Note."
-      });
+    .catch((error) => {
+      res.status(500).send(
+        {
+          error: error.message || "Some error occurred while creating the Note."
+        });
     });
 };
 
 /**
+ * Get All Order
  *
  * @param req
  * @param res
  * @param next
  */
-exports.list = (req, res, next) => {
+list = (req, res, next) => {
   let limit = req.query.limit && req.query.limit <= 100 ? parseInt(req.query.limit) : 10;
   let page = req.query.page ? parseInt(req.query.page) : 1;
 
-  OrderModel.list(limit, page)
+  OrderModel.listOrder(limit, page)
     .then((result) => {
       res.status(200).send(result);
     })
-    .catch((err) => {
-      res.status(500).send({
-        err: err.message || "Some error occurred while creating the Note."
-      });
+    .catch((error) => {
+      res.status(500).send(
+        {
+          error: error.message || "Some error occurred while creating the Note."
+        });
     });
 };
 
 /**
+ * Update Order by it's ID
  *
  * @param req
  * @param res
  * @param next
  * @returns {*}
  */
-exports.patchById = (req, res, next) => {
+patchById = (req, res, next) => {
   OrderModel.updateOrder(req.params.orderId, req.body)
     .then((result) => {
-      res.status(200).send({status: result.status});
+      res.status(200).send(
+        {
+          status: "SUCCESS"
+        });
     })
-    .catch((err) => {
-      res.status(500).send({
-        err: err.message || "Some error occurred while creating the Note."
-      });
+    .catch((error) => {
+      res.status(500).send(
+        {
+          error: error.message || "Some error occurred while creating the Note."
+        });
     });
+};
+
+module.exports = {
+  insert,
+  list,
+  patchById
 };

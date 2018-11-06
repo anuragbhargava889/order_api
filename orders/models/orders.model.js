@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
-const {googleHandler} = require('../../common/helper');
-const {getDistance} = googleHandler;
+const {getDistance} = require('../../common/services/google.service');
 const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
@@ -51,7 +50,7 @@ const Order = mongoose.model('Orders', orderSchema);
  * @param id
  * @returns {Promise}
  */
-exports.findById = (id) => {
+findById = (id) => {
   return Order.findById(id)
     .then((result) => {
       result = result.toJSON();
@@ -69,15 +68,18 @@ exports.findById = (id) => {
  * @param orderData
  * @returns {Promise}
  */
-exports.createOrder = async (orderData) => {
+createOrder = async (orderData) => {
   try {
-    let origin = orderData.origin.toString();
-    let destination = orderData.destination.toString();
+    const origin = orderData.origin.toString();
+    const destination = orderData.destination.toString();
     const distance = await getDistance(origin, destination);
-    console.log(distance.rows[0].elements[0].distance.text);
-    orderData.distance = distance.rows[0].elements[0].distance.text;
-    let order = new Order(orderData);
-    return order.save();
+    if (distance.status === 'OK') {
+      orderData.distance = distance.rows[0].elements[0].distance.value;
+      const order = new Order(orderData);
+      return order.save();
+    } else {
+      return Promise.reject({message: 'GOOGLE_API_ISSUE'});
+    }
   } catch (err) {
     return Promise.reject(err);
   }
@@ -89,7 +91,7 @@ exports.createOrder = async (orderData) => {
  * @param page
  * @returns {*}
  */
-exports.list = (perPage, page) => {
+listOrder = (perPage, page) => {
   try {
     return Order.paginate({}, {select: 'status origin destination distance', page: page, limit: perPage});
   } catch (err) {
@@ -103,7 +105,7 @@ exports.list = (perPage, page) => {
  * @param orderData
  * @returns {Promise<any>}
  */
-exports.updateOrder = (id, orderData) => {
+updateOrder = (id, orderData) => {
   try {
     return Order.findByIdAndUpdate(id, orderData, {new: true, runValidators: true});
   } catch (err) {
@@ -116,10 +118,18 @@ exports.updateOrder = (id, orderData) => {
  * @param id
  * @returns {*}
  */
-exports.findOrderByID = (id) => {
+findOrderByID = (id) => {
   try {
     return Order.findOne({_id: id}, 'status');
   } catch (err) {
     console.log(err)
   }
+};
+
+module.exports = {
+  findById,
+  createOrder,
+  updateOrder,
+  findOrderByID,
+  listOrder
 };

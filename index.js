@@ -1,4 +1,4 @@
-const config = require('./common/config/env.config');
+const config = require('./common/config/config');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -13,7 +13,7 @@ mongoose.connect(config.url, {
   autoIndex: false,
   useNewUrlParser: true
 }).then((result) => {
-  console.log(`${config.app_name} successfully connected to database.`);
+  console.log(`${config.appName} successfully connected to database.`);
 }).catch((err) => {
   console.log(err);
   process.exit(1);
