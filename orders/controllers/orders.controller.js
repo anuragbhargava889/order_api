@@ -10,7 +10,7 @@ const OrderModel = require('../models/orders.model');
 insert = (req, res, next) => {
   OrderModel.createOrder(req.body)
     .then((result) => {
-      res.status(201).send(
+      res.status(200).send(
         {
           id: result._id,
           distance: result.distance,
