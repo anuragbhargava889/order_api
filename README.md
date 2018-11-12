@@ -12,7 +12,7 @@
 ## How to Install & Run
 
 1.  Clone the repo
-2.  Set Google Distance Matrix API key in common/config/config.js file line no. 8
+2.  Set Google Distance Matrix API key in common/config/config.js file line no. 7
 3.  Run `./start.sh` to up docker containers
 4.  After starting container , testcases will run automatically
 
