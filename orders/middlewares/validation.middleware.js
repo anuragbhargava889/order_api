@@ -9,9 +9,9 @@ const errorMessages = require('../../common/error/error.messages');
 verifyCreateOrderSchema = (req, res, next) => {
   const validation = validate(req.body, orderNewSchema);
   if (!validation.valid) {
-    return res.status(errorMessages.REQUEST_BODY_INCORRECT.code).send(
+    return res.status(errorMessages.requestBodyIncorrect.code).send(
       {
-        error: errorMessages.REQUEST_BODY_INCORRECT.message
+        error: errorMessages.requestBodyIncorrect.message
       });
   } else {
     return next();
@@ -21,40 +21,20 @@ verifyCreateOrderSchema = (req, res, next) => {
 verifyUpdateOrderSchema = (req, res, next) => {
   const validation = validate(req.body, orderUpdateSchema);
   if (!validation.valid) {
-    return res.status(errorMessages.REQUEST_BODY_INCORRECT.code).send(
+    return res.status(errorMessages.requestBodyIncorrect.code).send(
       {
-        error: errorMessages.REQUEST_BODY_INCORRECT.message
+        error: errorMessages.requestBodyIncorrect.message
       });
   } else {
     return next();
   }
 };
 
-verifyIsCoordinates = (req, res, next) => {
-  if ((isCoordinates(req.body.origin) && (isCoordinates(req.body.destination)))) {
-    return next();
-  } else {
-    return res.status(400).send({error: 'Origin and destination should be floating numbers in array format.'});
-  }
-};
-
-verifyIsValidCoordinates = (req, res, next) => {
-  let originLat = req.body.origin[0];
-  let originLong = req.body.origin[1];
-  let destinationLat = req.body.destination[0];
-  let destinationLong = req.body.destination[1];
-  if (isValidCoordinates(originLat, originLong) && isValidCoordinates(destinationLat, destinationLong)) {
-    return next();
-  } else {
-    return res.status(400).send({error: 'Origin and destination should be valid lat long.'});
-  }
-};
-
-raceCondition = (req, res, next) => {
+verifyRaceCondition = (req, res, next) => {
   if (!req.params.orderId) {
-    return res.status(errorMessages.MISSING_ORDER_ID.code).send(
+    return res.status(errorMessages.missingOrderId.code).send(
       {
-        error: errorMessages.MISSING_ORDER_ID.message
+        error: errorMessages.missingOrderId.message
       });
   }
 
@@ -62,18 +42,18 @@ raceCondition = (req, res, next) => {
 
   query.then(function (reuslt) {
     if ((reuslt.status === 'TAKEN') && (req.body.status === 'TAKEN')) {
-      return res.status(errorMessages.ORDER_ALREADY_BEEN_TAKEN.code).send(
+      return res.status(errorMessages.orderAlreadyBeenTaken.code).send(
         {
-          error: errorMessages.ORDER_ALREADY_BEEN_TAKEN.message
+          error: errorMessages.orderAlreadyBeenTaken.message
         });
     } else {
       return next();
     }
   }).catch(function (err) {
     console.log(err);
-    return res.status(errorMessages.ORDER_ID_NOT_FOUND.code).send(
+    return res.status(errorMessages.orderIdNotFound.code).send(
       {
-        error: errorMessages.ORDER_ID_NOT_FOUND.message
+        error: errorMessages.orderIdNotFound.message
       });
   });
 };
@@ -81,7 +61,5 @@ raceCondition = (req, res, next) => {
 module.exports = {
   verifyCreateOrderSchema,
   verifyUpdateOrderSchema,
-  verifyIsCoordinates,
-  verifyIsValidCoordinates,
-  raceCondition
+  verifyRaceCondition
 };

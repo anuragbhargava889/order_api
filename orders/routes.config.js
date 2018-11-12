@@ -13,7 +13,7 @@ exports.routesConfig = function (app) {
 
   app.patch('/orders/:orderId', [
     ValidationMiddleware.verifyUpdateOrderSchema,
-    ValidationMiddleware.raceCondition,
+    ValidationMiddleware.verifyRaceCondition,
     OrderController.patchById
   ]);
 };

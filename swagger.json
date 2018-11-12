@@ -30,7 +30,7 @@
           "orders"
         ],
         "summary": "Add a new order",
-        "description": "",
+        "description": "Add a new order",
         "operationId": "addOrder",
         "consumes": [
           "application/json"
@@ -62,7 +62,7 @@
           "orders"
         ],
         "summary": "Updates a order status",
-        "description": "",
+        "description": "Updates a order status",
         "parameters": [
           {
             "name": "orderId",
@@ -119,9 +119,8 @@
           "type": "string",
           "description": "Order status",
           "enum": [
-            "available",
-            "pending",
-            "sold"
+            "TAKEN",
+            "UNASSIGN"
           ]
         }
       }
