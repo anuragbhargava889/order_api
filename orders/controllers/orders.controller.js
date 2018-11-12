@@ -38,6 +38,8 @@ list = (req, res, next) => {
 
   OrderModel.listOrder(limit, page)
     .then((result) => {
+      const newDocs = result.docs.map(({ _id, ...item }) => item);
+      result.docs = newDocs;
       res.status(200).send(result);
     })
     .catch((error) => {

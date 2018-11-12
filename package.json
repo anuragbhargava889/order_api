@@ -19,20 +19,21 @@
     "google-distance-matrix": "^1.1.1",
     "is-coordinates": "^2.0.2",
     "is-valid-coordinates": "^1.0.0",
-    "joi": "^14.0.4",
+    "joi": "^14.0.6",
     "jsonschema": "^1.2.4",
     "mocha": "^5.2.0",
-    "mongoose": "^5.3.9",
+    "mongoose": "^5.3.11",
     "mongoose-paginate": "^5.0.3",
     "nodemon": "^1.18.6",
     "sinon": "^6.3.5",
-    "sinon-mongoose": "^2.2.1"
+    "sinon-mongoose": "^2.2.1",
+    "swagger-ui-express": "^4.0.1"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
     "babel-preset-es2017": "^6.24.1",
     "chai-http": "^4.2.0",
-    "eslint": "^5.6.0",
+    "eslint": "^5.9.0",
     "supertest": "^3.3.0"
   }
 }

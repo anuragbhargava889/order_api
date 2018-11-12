@@ -25,19 +25,22 @@ orderSchema.post('save', function (error, doc, next) {
 
 /**
  *
- */
-orderSchema.virtual('id').get(function () {
-  return this._id.toHexString();
-});
-
-/**
- *
  * @param cb
  * @returns {Query|void|number|*|BigInt|T}
  */
 orderSchema.findById = function (cb) {
   return this.model('Orders').find({id: this.id}, cb);
 };
+
+// Duplicate the ID field.
+orderSchema.virtual('id').get(function(){
+  return this._id.toHexString();
+});
+
+// Ensure virtual fields are serialised.
+orderSchema.set('toJSON', {
+  virtuals: true
+});
 
 /**
  *
@@ -93,7 +96,7 @@ createOrder = async (orderData) => {
  */
 listOrder = (perPage, page) => {
   try {
-    return Order.paginate({}, {select: 'status origin destination distance', page: page, limit: perPage});
+    return Order.paginate({}, {select: 'id status distance', page: page, limit: perPage});
   } catch (err) {
     return Promise.reject(err);
   }

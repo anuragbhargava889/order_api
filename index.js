@@ -2,22 +2,18 @@ const config = require('./common/config/config');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+const {connectToDatabase} = require('./common/services/db.connection.service');
 const OrdersRouter = require('./orders/routes.config');
-const mongoosePaginate = require('mongoose-paginate');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 const HTTP_SERVER_ERROR = 500;
-mongoose.set('debug', true);
+const options = {
+  explorer : true
+};
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
 // connect to our database
-mongoose.connect(config.url, {
-  autoIndex: false,
-  useNewUrlParser: true
-}).then((result) => {
-  console.log(`${config.appName} successfully connected to database.`);
-}).catch((err) => {
-  console.log(err);
-  process.exit(1);
-});
+connectToDatabase();
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -35,6 +31,8 @@ app.use(function (req, res, next) {
 
 app.use(bodyParser.json());
 
+
+
 app.use(function (err, req, res, next) {
   if (res.headersSent) {
     return next(err);
@@ -44,12 +42,6 @@ app.use(function (err, req, res, next) {
 });
 
 OrdersRouter.routesConfig(app);
-
-mongoosePaginate.paginate.options = {
-  lean: true,
-  limit: 20,
-  leanWithId: false
-};
 
 app.listen(config.port, function () {
   console.log('app listening at port %s', config.port);
