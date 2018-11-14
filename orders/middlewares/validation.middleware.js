@@ -19,9 +19,9 @@ const verifyCreateOrderSchema = (req, res, next) => {
 const verifyUpdateOrderSchema = (req, res, next) => {
   const validation = validate(req.body, orderUpdateSchema);
   if (!validation.valid) {
-    return res.status(errorMessages.requestBodyIncorrect.code).send(
+    return res.status(errorMessages.invalidOrderStatus.code).send(
       {
-        error: errorMessages.requestBodyIncorrect.message
+        error: errorMessages.invalidOrderStatus.message
       });
   } else {
     return next();

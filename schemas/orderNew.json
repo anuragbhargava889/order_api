@@ -8,18 +8,32 @@
       "uniqueItems": false,
       "minItems": 2,
       "maxItems": 2,
-      "items": {
-        "type": "string"
-      }
+      "items": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "string",
+          "minLength": 1
+        }
+      ]
     },
     "destination": {
       "type": "array",
       "uniqueItems": false,
       "minItems": 2,
       "maxItems": 2,
-      "items": {
-        "type": "string"
-      }
+      "items": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "string",
+          "minLength": 1
+        }
+      ]
     }
   },
   "required": [

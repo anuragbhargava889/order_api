@@ -18,5 +18,9 @@ module.exports = {
   "invalidQueryParameters": {
     "code": "422",
     "message": "INVALID_QUERY_PARAMETERS."
+  },
+  "invalidOrderStatus": {
+    "code": "422",
+    "message": "INVALID_ORDER_STATUS."
   }
 };
