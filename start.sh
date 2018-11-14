@@ -8,4 +8,4 @@ sleep 5
 sudo docker-compose up -d
 sleep 5
 echo Starting test inside container
-sudo docker-compose exec app npm test
+sudo docker-compose exec order_api_app npm test
