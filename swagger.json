@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is Order API",
+    "description": "Logistic Api",
     "version": "1.0.0",
-    "title": "Swagger Order API",
+    "title": "Order API",
     "contact": {
       "email": "anuragbhargava0609@gmail.com"
     },
@@ -17,7 +17,7 @@
   "tags": [
     {
       "name": "orders",
-      "description": "Everything about your orders"
+      "description": "Everything about orders"
     }
   ],
   "schemes": [
