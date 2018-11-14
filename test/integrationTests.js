@@ -101,7 +101,7 @@ describe('/PATCH /orders/:id', () => {
       });
   });
 
-  it('should return 500 for bad request', (done) => {
+  it('should return 422 for bad request', (done) => {
     chai.request(server)
       .get('/orders?page=1&limit=1')
       .end((err, res) => {
@@ -116,7 +116,7 @@ describe('/PATCH /orders/:id', () => {
       });
   });
 
-  it('should return 500 for bad request like all order status should be capitalize like TAKEN', (done) => {
+  it('should return 422 for bad request like all order status should be capitalize like TAKEN', (done) => {
     chai.request(server)
       .get('/orders?page=1&limit=1')
       .end((err, res) => {
@@ -125,7 +125,7 @@ describe('/PATCH /orders/:id', () => {
           .send({
             status: "taken"
           }).end((err, res) => {
-          expect(res).to.have.status(500);
+          expect(res).to.have.status(422);
           done();
         })
       });
