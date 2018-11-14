@@ -36,6 +36,7 @@ getAllOrders = (req, res) => {
 
   OrderModel.listOrder(limit, page)
     .then((result) => {
+      // Removed _id from result
       result.docs = result.docs.map(({_id, ...item}) => item);
       res.status(200).send(result);
     })

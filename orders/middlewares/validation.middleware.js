@@ -1,7 +1,7 @@
 const {orderReadSchema, orderNewSchema, orderUpdateSchema} = require('../../schemas');
 const {validate} = require('jsonschema');
 const OrderModel = require('../models/orders.model');
-const errorMessages = require('../../common/error/error.messages');
+const errorMessages = require('../error/error.messages');
 
 
 verifyCreateOrderSchema = (req, res, next) => {

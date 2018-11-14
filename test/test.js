@@ -28,12 +28,41 @@ describe('GET /', () => {
  * Create order testcase
  */
 describe('/POST order', () => {
-  it('should return 500 with invalid format', (done) => {
+  it('should return 422 with invalid origin format like if we send integer ' +
+    'instead of string example [28, "77.111761"]', (done) => {
     chai.request(server)
       .post('/orders')
       .send({
         origin: [28, "77.111761"],
         destination: ["28.530264", "77.111761"]
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(422);
+        done();
+      });
+  });
+
+  it('should return 422 with invalid origin format if we send more than two ' +
+    'string in origin array like ["77.111761", "77.111761", "77.111761"]', (done) => {
+    chai.request(server)
+      .post('/orders')
+      .send({
+        origin: ["77.111761", "77.111761", "77.111761"],
+        destination: ["28.530264", "77.111761"]
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(422);
+        done();
+      });
+  });
+
+  it('should return 422 with invalid origin format if we send more than two ' +
+    'string in destination array like ["77.111761", "77.111761", "77.111761"]', (done) => {
+    chai.request(server)
+      .post('/orders')
+      .send({
+        origin: ["77.111761", "77.111761"],
+        destination: ["28.530264", "28.530264", "77.111761"]
       })
       .end((err, res) => {
         expect(res).to.have.status(422);
@@ -72,7 +101,7 @@ describe('/PATCH /orders/:id', () => {
       });
   });
 
-  it('should return 500 for bad format', (done) => {
+  it('should return 500 for bad request', (done) => {
     chai.request(server)
       .get('/orders?page=1&limit=1')
       .end((err, res) => {
@@ -82,6 +111,21 @@ describe('/PATCH /orders/:id', () => {
             wrong_parm: "TAKEN" //Wrong format as param not supported
           }).end((err, res) => {
           expect(res).to.have.status(422);
+          done();
+        })
+      });
+  });
+
+  it('should return 500 for bad request like all order status should be capitalize like TAKEN', (done) => {
+    chai.request(server)
+      .get('/orders?page=1&limit=1')
+      .end((err, res) => {
+        chai.request(server)
+          .patch('/orders/' + res.body.docs[0].id)
+          .send({
+            status: "taken"
+          }).end((err, res) => {
+          expect(res).to.have.status(500);
           done();
         })
       });
@@ -133,7 +177,7 @@ describe('GET /', () => {
       });
   });
 
-  it('should return wrong limit datatype error with (limit=abc)', (done) => {
+  it('should return wrong limit data type error with (limit=abc)', (done) => {
     chai.request(server)
       .get('/orders?page=1&limit=abc')
       .end(function (err, res) {
@@ -142,7 +186,7 @@ describe('GET /', () => {
       });
   });
 
-  it('should return wrong page datatype error with (page=abc)', (done) => {
+  it('should return wrong page data type error with (page=abc)', (done) => {
     chai.request(server)
       .get('/orders?page=abc&limit=1')
       .end(function (err, res) {
@@ -151,7 +195,7 @@ describe('GET /', () => {
       });
   });
 
-  it('should return error with limit value less than 1 (limit=-1)', (done) => {
+  it('should return error if we pass page query value as string like ?page=abc&limit=1', (done) => {
     chai.request(server)
       .get('/orders?page=abc&limit=1')
       .end(function (err, res) {
@@ -160,9 +204,36 @@ describe('GET /', () => {
       });
   });
 
-  it('should return error with page value less than 1 (page=0)', (done) => {
+  it('should return error if we pass limit query value less than zero like ?limit=0', (done) => {
     chai.request(server)
-      .get('/orders?page=abc&limit=1')
+      .get('/orders?limit=0')
+      .end(function (err, res) {
+        expect(res).to.have.status(422);
+        done();
+      });
+  });
+
+  it('should return error if we pass page query value less than zero like ?page=0', (done) => {
+    chai.request(server)
+      .get('/orders?page=0')
+      .end(function (err, res) {
+        expect(res).to.have.status(422);
+        done();
+      });
+  });
+
+  it('should return error if we pass limit query value as negative integer ?limit=-2', (done) => {
+    chai.request(server)
+      .get('/orders?limit=-2')
+      .end(function (err, res) {
+        expect(res).to.have.status(422);
+        done();
+      });
+  });
+
+  it('should return error if we pass invalid query string like ?test=abc', (done) => {
+    chai.request(server)
+      .get('/orders?test=abc')
       .end(function (err, res) {
         expect(res).to.have.status(422);
         done();

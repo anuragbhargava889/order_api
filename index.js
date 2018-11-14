@@ -9,7 +9,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const HTTP_SERVER_ERROR = 500;
 const options = {
-  explorer : true
+  explorer: true
 };
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
@@ -33,16 +33,20 @@ app.use(function (req, res, next) {
 app.use(bodyParser.json());
 app.use(queryParser());
 
+OrdersRouter.routesConfig(app);
 
 app.use(function (err, req, res, next) {
   if (res.headersSent) {
     return next(err);
+  } else if (err instanceof SyntaxError) {
+    return res.status(400).send(JSON.stringify(
+      {
+        error: "The body of your request is not valid json!"
+      }));
   }
 
   return res.status(err.status || HTTP_SERVER_ERROR).render('500');
 });
-
-OrdersRouter.routesConfig(app);
 
 app.listen(config.port, function () {
   console.log('app listening at port %s', config.port);
