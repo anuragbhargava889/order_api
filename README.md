@@ -21,7 +21,7 @@
 
 1. You can run `docker-compose up -d` from terminal inside the application folder
 2. Server is accessible at `http://localhost:8080`
-3. Run manual testcase suite by `docker-compose exec app npm test`
+3. Run manual testcase suite by `docker-compose exec order_api_app npm test`
 
 ## How to Run Application (Explicity from cli without Docker Container) 
 
@@ -65,3 +65,6 @@
 
 1. Eslint is used to lint the code.
 2. For changes in any rules. Please update `.eslintrc` as per your need.
+
+## Note
+- By default 10 records will be displayed when listing order.

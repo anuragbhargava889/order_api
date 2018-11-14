@@ -1,23 +1,24 @@
+const {getDistance} = require('../common/services/google.service');
+const orderModel = require('../orders/models/orders.model');
 const chai = require('chai');
-const chaiHttp = require('chai-http');
 const should = chai.should();
 const expect = chai.expect;
-chai.use(chaiHttp);
-const request = require('supertest');
-const express = require('express');
-const mongoose = require('mongoose');
-const server = 'localhost:8080';
 
-/*
- * No route found testcase
- */
-describe('GET /', () => {
-  it('should return 404 for Non configured Urls', (done) => {
-    chai.request(server)
-      .get('/')
-      .end(function (err, res) {
-        expect(res).to.have.status(404);
-        done(); // <= Call done to signal callback end
-      });
+
+describe('Check Google Api Working', () => {
+  describe('getDistance()', () => {
+    it('should return valid response', async () => {
+      const origin = '28.4595, 77.0266';
+      const destination = '26.2183, 78.1828';
+      const distance = await getDistance(origin, destination);
+      expect(distance).to.have.property('status');
+    });
+
+    it('should return zero result', async () => {
+      const origin = '2, 3';
+      const destination = '4, 5';
+      const distance = await getDistance(origin, destination);
+      expect(distance.rows[0].elements[0].status).equal('ZERO_RESULTS');
+    });
   });
 });

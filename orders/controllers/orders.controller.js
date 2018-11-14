@@ -1,4 +1,4 @@
-const OrderModel = require('../models/orders.model');
+const orderModel = require('../models/orders.model');
 
 /**
  * Create New Order
@@ -7,7 +7,7 @@ const OrderModel = require('../models/orders.model');
  * @param res
  */
 const createOrder = (req, res) => {
-  OrderModel.createOrder(req.body)
+  orderModel.createOrder(req.body)
     .then((result) => {
       res.status(200).send(
         {
@@ -34,7 +34,7 @@ const getAllOrders = (req, res) => {
   const limit = req.query.limit ? (req.query.limit) : 10;
   const page = req.query.page ? (req.query.page) : 1;
 
-  OrderModel.listOrder(limit, page)
+  orderModel.listOrder(limit, page)
     .then((result) => {
       // Removed _id from result
       result.docs = result.docs.map(({_id, ...item}) => item);
@@ -56,7 +56,7 @@ const getAllOrders = (req, res) => {
  * @returns {*}
  */
 const patchOrderById = (req, res) => {
-  OrderModel.updateOrder(req.params.orderId, req.body)
+  orderModel.updateOrder(req.params.orderId, req.body)
     .then((result) => {
       res.status(200).send(
         {
