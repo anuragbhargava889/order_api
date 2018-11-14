@@ -54,9 +54,38 @@
             "description": "Invalid input"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "summary": "Get all orders",
+        "description": "Get all orders",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "type": "integer",
+            "description": "The numbers of items to return"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "description": "Current page no."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        }
       }
     },
-    "/order/{orderId}": {
+    "/orders/{orderId}": {
       "patch": {
         "tags": [
           "orders"
@@ -83,8 +112,8 @@
           }
         ],
         "responses": {
-          "405": {
-            "description": "Invalid input"
+          "409": {
+            "description": "ORDER_ALREADY_BEEN_TAKEN"
           }
         }
       }

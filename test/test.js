@@ -73,32 +73,16 @@ describe('/POST order', () => {
 /*
  * Order update testcase
  */
-describe('/PUT /orders/:id', () => {
+describe('/PATCH /orders/:id', () => {
   it('should return error for order not found', (done) => {
     chai.request(server)
-      .put('/orders/5bc07c1c478e1313f08333bb')
+      .patch('/orders/5bc07c1c478e1313f08333bb')
       .send({
         status: "taken"
       })
       .end((err, res) => {
         expect(res).to.have.status(404);
         done();
-      });
-  });
-
-  it('should return 500 for bad format', (done) => {
-    chai.request(server)
-      .get('/orders?page=1&limit=1')
-      .end((err, res) => {
-        let orderResponse = res;
-        chai.request(server)
-          .put('/order/' + res.body[0].id)
-          .send({
-            wrong_parm: "taken" //Wrong format as param not supported
-          }).end((err, res) => {
-          expect(res).to.have.status(500);
-          done();
-        })
       });
   });
 

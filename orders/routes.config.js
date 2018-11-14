@@ -4,16 +4,16 @@ const ValidationMiddleware = require('./middlewares/validation.middleware');
 exports.routesConfig = function (app) {
   app.post('/orders', [
     ValidationMiddleware.verifyCreateOrderSchema,
-    OrderController.insert,
+    OrderController.createOrder,
   ]);
 
   app.get('/orders', [
-    OrderController.list
+    OrderController.getAllOrders
   ]);
 
   app.patch('/orders/:orderId', [
     ValidationMiddleware.verifyUpdateOrderSchema,
     ValidationMiddleware.verifyRaceCondition,
-    OrderController.patchById
+    OrderController.patchOrderById
   ]);
 };

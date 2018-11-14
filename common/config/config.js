@@ -5,6 +5,6 @@
 module.exports = {
   "port": 8080,
   "googleKey": "AIzaSyC1Y_rGkz1hHVNJqrNEUcQmfiY9VQqT7aU",
-  "url": "mongodb://mongo/logistic",
+  "databaseUrl": "mongodb://localhost/logistic",
   "appName": "ORDER API"
 };

@@ -7,7 +7,7 @@ const OrderModel = require('../models/orders.model');
  * @param res
  * @param next
  */
-insert = (req, res, next) => {
+createOrder = (req, res, next) => {
   OrderModel.createOrder(req.body)
     .then((result) => {
       res.status(200).send(
@@ -32,14 +32,13 @@ insert = (req, res, next) => {
  * @param res
  * @param next
  */
-list = (req, res, next) => {
-  let limit = req.query.limit && req.query.limit <= 100 ? parseInt(req.query.limit) : 10;
-  let page = req.query.page ? parseInt(req.query.page) : 1;
-
+getAllOrders = (req, res, next) => {
+  const limit = req.query.limit && req.query.limit <= 100 ? parseInt(req.query.limit) : 10;
+  const page = req.query.page ? parseInt(req.query.page) : 1;
+  
   OrderModel.listOrder(limit, page)
     .then((result) => {
-      const newDocs = result.docs.map(({ _id, ...item }) => item);
-      result.docs = newDocs;
+      result.docs = result.docs.map(({_id, ...item}) => item);
       res.status(200).send(result);
     })
     .catch((error) => {
@@ -58,7 +57,7 @@ list = (req, res, next) => {
  * @param next
  * @returns {*}
  */
-patchById = (req, res, next) => {
+patchOrderById = (req, res, next) => {
   OrderModel.updateOrder(req.params.orderId, req.body)
     .then((result) => {
       res.status(200).send(
@@ -75,7 +74,7 @@ patchById = (req, res, next) => {
 };
 
 module.exports = {
-  insert,
-  list,
-  patchById
+  createOrder,
+  getAllOrders,
+  patchOrderById
 };

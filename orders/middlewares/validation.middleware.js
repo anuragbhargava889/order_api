@@ -1,5 +1,3 @@
-const isCoordinates = require('is-coordinates');
-const isValidCoordinates = require('is-valid-coordinates');
 const {orderNewSchema, orderUpdateSchema} = require('../../schemas');
 const {validate} = require('jsonschema');
 const OrderModel = require('../models/orders.model');
@@ -38,7 +36,7 @@ verifyRaceCondition = (req, res, next) => {
       });
   }
 
-  let query = OrderModel.findOrderByID(req.params.orderId);
+  const query = OrderModel.findOrderByID(req.params.orderId);
 
   query.then(function (reuslt) {
     if ((reuslt.status === 'TAKEN') && (req.body.status === 'TAKEN')) {

@@ -110,7 +110,7 @@ listOrder = (perPage, page) => {
  */
 updateOrder = (id, orderData) => {
   try {
-    return Order.findByIdAndUpdate(id, orderData, {new: true, runValidators: true});
+    return Order.findOneAndUpdate({ _id : id } , orderData);
   } catch (err) {
     return Promise.reject(err);
   }

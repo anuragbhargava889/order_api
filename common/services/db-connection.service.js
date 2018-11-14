@@ -6,7 +6,7 @@ mongoose.set('debug', true);
 
 function connectToDatabase() {
   // connect to our database
-  mongoose.connect(config.url, {
+  mongoose.connect(config.databaseUrl, {
     autoIndex: false,
     useNewUrlParser: true
   }).then((result) => {

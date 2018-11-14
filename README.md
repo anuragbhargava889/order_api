@@ -8,6 +8,7 @@
 - [Express.js](https://expressjs.com/) as the server framework / controller layer
 - [MongoDB](https://www.mongodb.com/) as the database layer
 - [Mongoose](https://mongoosejs.com/) as the "ODM" / model layer
+- [Swagger] as for API documentation and demo
 
 ## How to Install & Run
 
@@ -51,3 +52,8 @@
 
 ## Google API configuration ##
 - add google apk key in configuration file located in common/config/config.js
+
+## Swagger integration
+
+1. Open URL for API demo `http://localhost:8080/api-docs`
+2. Here you can perform all API operations like GET, UPDATE, POST
