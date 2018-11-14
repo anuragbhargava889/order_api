@@ -23,9 +23,12 @@
 2. Server is accessible at `http://localhost:8080`
 3. Run manual testcase suite by `docker-compose exec app npm test`
 
-## How to Run Tests (Explicity from cli)
+## How to Run Application (Explicity from cli without Docker Container) 
 
- You should be able to run `npm install` followed by `npm test app/test` to run everything (assuming you have the LTS version of Node installed on your machine).
+1. For this you need to install npm and node JS on your local machine. (assuming you have the LTS version of Node installed on your machine).
+2. Then run `npm install` inside the application folder. It will install all packages.
+3. Then run `npm start`. It will start the node js server and application is accessiable at `http://localhost:8080`.
+4. Then run `npm test` to run test cases.
 
 ## App Structure
 
@@ -36,7 +39,7 @@
 - this folder contains test case run using `npm test app/test` which in turn uses [Mocha]
 
 **./schemas**
-- `schemas` are [JSONSchema] validation schemas for creating or updating a Order.
+- `schemas` are [JSONSchema] validation schemas for reading , creating or updating a Order.
 
 **./orders**
 - `controllers` are Express.js route handlers that have `request`, `response`, and `next` parameters.
@@ -57,3 +60,8 @@
 
 1. Open URL for API demo `http://localhost:8080/api-docs`
 2. Here you can perform all API operations like GET, UPDATE, POST
+
+## Code Linting 
+
+1. Eslint is used to lint the code.
+2. For changes in any rules. Please update `.eslintrc` as per your need.

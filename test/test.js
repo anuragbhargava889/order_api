@@ -36,7 +36,7 @@ describe('/POST order', () => {
         destination: ["28.530264", "77.111761"]
       })
       .end((err, res) => {
-        expect(res).to.have.status(500);
+        expect(res).to.have.status(422);
         done();
       });
   });
@@ -45,22 +45,8 @@ describe('/POST order', () => {
     chai.request(server)
       .post('/orders')
       .send({
-        origin: ["28.58484", "77.111761"],
-        destination: ["28.530264", "77.111761"]
-      })
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        done();
-        data = res;
-      });
-  });
-
-  it('should return response status UNASSIGN for new order', (done) => {
-    chai.request(server)
-      .post('/orders')
-      .send({
-        origin: ["28.530264", "77.111761"],
-        destination: ["28.530264", "77.111761"]
+        origin: ["28.4595", "77.0266"],
+        destination: ["28.5355", "77.3910"]
       })
       .end((err, res) => {
         expect(res).to.have.status(200);
@@ -78,7 +64,7 @@ describe('/PATCH /orders/:id', () => {
     chai.request(server)
       .patch('/orders/5bc07c1c478e1313f08333bb')
       .send({
-        status: "taken"
+        status: "TAKEN"
       })
       .end((err, res) => {
         expect(res).to.have.status(404);
@@ -86,40 +72,49 @@ describe('/PATCH /orders/:id', () => {
       });
   });
 
-  it('should return success for updating status to taken', (done) => {
+  it('should return 500 for bad format', (done) => {
     chai.request(server)
       .get('/orders?page=1&limit=1')
       .end((err, res) => {
         chai.request(server)
-          .put('/order/' + res.body[0].id)
+          .patch('/orders/' + res.body.docs[0].id)
           .send({
-            status: "taken"
-          })
-          .end((err, res) => {
-            expect(res).to.have.status(200);
-            done();
-          });
+            wrong_parm: "TAKEN" //Wrong format as param not supported
+          }).end((err, res) => {
+          expect(res).to.have.status(422);
+          done();
+        })
       });
   });
 
-  it('should return failure for updating status to taken', (done) => {
+  it('should return 200 for successfully update', (done) => {
     chai.request(server)
       .get('/orders?page=1&limit=1')
       .end((err, res) => {
         let orderResponse = res;
         chai.request(server)
-          .put('/order/' + res.body[0].id)
+          .patch('/orders/' + res.body.docs[0].id)
           .send({
-            status: "taken"
+            status: "TAKEN"
+          }).end((err, res) => {
+          expect(res).to.have.status(200);
+          done();
+        })
+      });
+  });
+
+  it('should return 409 for order status conflict', (done) => {
+    chai.request(server)
+      .get('/orders?page=1&limit=1')
+      .end((err, res) => {
+        let orderResponse = res;
+        chai.request(server)
+          .patch('/orders/' + res.body.docs[0].id)
+          .send({
+            status: "TAKEN"
           }).end((err, res) => {
           expect(res).to.have.status(409);
-          chai.request(server)
-            .put('/order/' + orderResponse.body[0].id)
-            .send({
-              status: "UNASSIGN"
-            }).end((err, res) => {
-            done();
-          });
+          done();
         })
       });
   });
@@ -142,7 +137,7 @@ describe('GET /', () => {
     chai.request(server)
       .get('/orders?page=1&limit=abc')
       .end(function (err, res) {
-        expect(res).to.have.status(500);
+        expect(res).to.have.status(422);
         done();
       });
   });
@@ -151,7 +146,7 @@ describe('GET /', () => {
     chai.request(server)
       .get('/orders?page=abc&limit=1')
       .end(function (err, res) {
-        expect(res).to.have.status(500);
+        expect(res).to.have.status(422);
         done();
       });
   });
@@ -160,7 +155,7 @@ describe('GET /', () => {
     chai.request(server)
       .get('/orders?page=abc&limit=1')
       .end(function (err, res) {
-        expect(res).to.have.status(500);
+        expect(res).to.have.status(422);
         done();
       });
   });
@@ -169,7 +164,7 @@ describe('GET /', () => {
     chai.request(server)
       .get('/orders?page=abc&limit=1')
       .end(function (err, res) {
-        expect(res).to.have.status(500);
+        expect(res).to.have.status(422);
         done();
       });
   });

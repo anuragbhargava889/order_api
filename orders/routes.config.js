@@ -8,6 +8,7 @@ exports.routesConfig = function (app) {
   ]);
 
   app.get('/orders', [
+    ValidationMiddleware.verifyReadOrderSchema,
     OrderController.getAllOrders
   ]);
 

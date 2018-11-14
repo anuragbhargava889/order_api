@@ -1,13 +1,28 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
 const {getDistance} = require('../../common/services/google.service');
+
 const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
-  distance: {type: String, required: true},
-  status: {type: String, enum: ['UNASSIGN', 'TAKEN'], default: 'UNASSIGN', required: true},
-  origin: {type: Array, required: true},
-  destination: {type: Array, required: true}
+  distance: {
+    type: String,
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ['UNASSIGN', 'TAKEN'],
+    default: 'UNASSIGN',
+    required: true
+  },
+  origin: {
+    type: Array,
+    required: true
+  },
+  destination: {
+    type: Array,
+    required: true
+  }
 });
 
 orderSchema.plugin(mongoosePaginate);
@@ -15,10 +30,11 @@ orderSchema.plugin(mongoosePaginate);
 /**
  * Hook After Order Save
  */
-orderSchema.post('save', function (error, doc, next) {
+orderSchema.post('save', (error, doc, next) => {
   if (error.name === 'MongoError' && error.code === 11000) {
     next(new Error('There was a duplicate key error'));
-  } else {
+  }
+  else {
     next(error);
   }
 });
@@ -33,7 +49,7 @@ orderSchema.findById = function (cb) {
 };
 
 // Duplicate the ID field.
-orderSchema.virtual('id').get(function(){
+orderSchema.virtual('id').get(function () {
   return this._id.toHexString();
 });
 
@@ -53,18 +69,14 @@ const Order = mongoose.model('Orders', orderSchema);
  * @param id
  * @returns {Promise}
  */
-findById = (id) => {
-  return Order.findById(id)
-    .then((result) => {
-      result = result.toJSON();
-      delete result._id;
-      delete result.__v;
-      return result;
-    })
-    .catch((err) => {
-      return Promise.reject(err);
-    });
-};
+findById = id => Order.findById(id)
+  .then((result) => {
+    result = result.toJSON();
+    delete result._id;
+    delete result.__v;
+    return result;
+  })
+  .catch(err => Promise.reject(err));
 
 /**
  *
@@ -80,10 +92,10 @@ createOrder = async (orderData) => {
       orderData.distance = distance.rows[0].elements[0].distance.value;
       const order = new Order(orderData);
       return order.save();
-    } else {
-      return Promise.reject({message: 'GOOGLE_API_ISSUE'});
     }
-  } catch (err) {
+    return Promise.reject({message: 'GOOGLE_API_ISSUE'});
+  }
+  catch (err) {
     return Promise.reject(err);
   }
 };
@@ -96,8 +108,9 @@ createOrder = async (orderData) => {
  */
 listOrder = (perPage, page) => {
   try {
-    return Order.paginate({}, {select: 'id status distance', page: page, limit: perPage});
-  } catch (err) {
+    return Order.paginate({}, {select: 'id status distance', page, limit: perPage});
+  }
+  catch (err) {
     return Promise.reject(err);
   }
 };
@@ -110,8 +123,9 @@ listOrder = (perPage, page) => {
  */
 updateOrder = (id, orderData) => {
   try {
-    return Order.findOneAndUpdate({ _id : id } , orderData);
-  } catch (err) {
+    return Order.findOneAndUpdate({_id: id}, orderData);
+  }
+  catch (err) {
     return Promise.reject(err);
   }
 };
@@ -124,8 +138,9 @@ updateOrder = (id, orderData) => {
 findOrderByID = (id) => {
   try {
     return Order.findOne({_id: id}, 'status');
-  } catch (err) {
-    console.log(err)
+  }
+  catch (err) {
+    console.log(err);
   }
 };
 

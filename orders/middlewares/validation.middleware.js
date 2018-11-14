@@ -1,4 +1,4 @@
-const {orderNewSchema, orderUpdateSchema} = require('../../schemas');
+const {orderReadSchema, orderNewSchema, orderUpdateSchema} = require('../../schemas');
 const {validate} = require('jsonschema');
 const OrderModel = require('../models/orders.model');
 const errorMessages = require('../../common/error/error.messages');
@@ -28,6 +28,18 @@ verifyUpdateOrderSchema = (req, res, next) => {
   }
 };
 
+verifyReadOrderSchema = (req, res, next) => {
+  const validation = validate(req.query, orderReadSchema);
+  if (!validation.valid) {
+    return res.status(errorMessages.invalidQueryParameters.code).send(
+      {
+        error: errorMessages.invalidQueryParameters.message
+      });
+  } else {
+    return next();
+  }
+};
+
 verifyRaceCondition = (req, res, next) => {
   if (!req.params.orderId) {
     return res.status(errorMessages.missingOrderId.code).send(
@@ -48,7 +60,6 @@ verifyRaceCondition = (req, res, next) => {
       return next();
     }
   }).catch(function (err) {
-    console.log(err);
     return res.status(errorMessages.orderIdNotFound.code).send(
       {
         error: errorMessages.orderIdNotFound.message
@@ -57,6 +68,7 @@ verifyRaceCondition = (req, res, next) => {
 };
 
 module.exports = {
+  verifyReadOrderSchema,
   verifyCreateOrderSchema,
   verifyUpdateOrderSchema,
   verifyRaceCondition

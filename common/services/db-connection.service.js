@@ -20,6 +20,9 @@ function connectToDatabase() {
 mongoosePaginate.paginate.options = {
   lean: true,
   limit: 20,
+  sort: {
+    _id: 'desc'
+  },
   leanWithId: true
 };
 

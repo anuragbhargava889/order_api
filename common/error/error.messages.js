@@ -12,7 +12,11 @@ module.exports = {
     "message": "ORDER_ID_NOT_FOUND."
   },
   "requestBodyIncorrect": {
-    "code": "500",
+    "code": "422",
     "message": "REQUEST_BODY_INCORRECT."
+  },
+  "invalidQueryParameters": {
+    "code": "422",
+    "message": "INVALID_QUERY_PARAMETERS."
   }
 };

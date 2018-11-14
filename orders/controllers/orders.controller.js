@@ -5,9 +5,8 @@ const OrderModel = require('../models/orders.model');
  *
  * @param req
  * @param res
- * @param next
  */
-createOrder = (req, res, next) => {
+createOrder = (req, res) => {
   OrderModel.createOrder(req.body)
     .then((result) => {
       res.status(200).send(
@@ -20,7 +19,7 @@ createOrder = (req, res, next) => {
     .catch((error) => {
       res.status(500).send(
         {
-          error: error.message || "Some error occurred while creating the Note."
+          error: error.message || 'Some error occurred while creating the Note.'
         });
     });
 };
@@ -30,12 +29,11 @@ createOrder = (req, res, next) => {
  *
  * @param req
  * @param res
- * @param next
  */
-getAllOrders = (req, res, next) => {
+getAllOrders = (req, res) => {
   const limit = req.query.limit && req.query.limit <= 100 ? parseInt(req.query.limit) : 10;
   const page = req.query.page ? parseInt(req.query.page) : 1;
-  
+
   OrderModel.listOrder(limit, page)
     .then((result) => {
       result.docs = result.docs.map(({_id, ...item}) => item);
@@ -44,7 +42,7 @@ getAllOrders = (req, res, next) => {
     .catch((error) => {
       res.status(500).send(
         {
-          error: error.message || "Some error occurred while creating the Note."
+          error: error.message || 'Some error occurred while creating the Note.'
         });
     });
 };
@@ -54,10 +52,9 @@ getAllOrders = (req, res, next) => {
  *
  * @param req
  * @param res
- * @param next
  * @returns {*}
  */
-patchOrderById = (req, res, next) => {
+patchOrderById = (req, res) => {
   OrderModel.updateOrder(req.params.orderId, req.body)
     .then((result) => {
       res.status(200).send(
@@ -68,7 +65,7 @@ patchOrderById = (req, res, next) => {
     .catch((error) => {
       res.status(500).send(
         {
-          error: error.message || "Some error occurred while creating the Note."
+          error: error.message || 'Some error occurred while creating the Note.'
         });
     });
 };

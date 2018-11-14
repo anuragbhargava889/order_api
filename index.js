@@ -2,6 +2,7 @@ const config = require('./common/config/config');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const queryParser = require('express-query-int');
 const {connectToDatabase} = require('./common/services/db-connection.service');
 const OrdersRouter = require('./orders/routes.config');
 const swaggerUi = require('swagger-ui-express');
@@ -30,7 +31,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(bodyParser.json());
-
+app.use(queryParser());
 
 
 app.use(function (err, req, res, next) {
