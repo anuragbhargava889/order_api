@@ -36,7 +36,7 @@
 - `index.js` is the entrypoint that actually starts the Express server
 
 **./test**
-- this folder contains test case run using `npm test app/test` which in turn uses [Mocha]
+- this folder contains test case run using `npm test` which in turn uses [Mocha]
 
 **./schemas**
 - `schemas` are [JSONSchema] validation schemas for reading , creating or updating a Order.
