@@ -4,7 +4,7 @@ const OrderModel = require('../models/orders.model');
 const errorMessages = require('../error/error.messages');
 
 
-verifyCreateOrderSchema = (req, res, next) => {
+const verifyCreateOrderSchema = (req, res, next) => {
   const validation = validate(req.body, orderNewSchema);
   if (!validation.valid) {
     return res.status(errorMessages.requestBodyIncorrect.code).send(
@@ -16,7 +16,7 @@ verifyCreateOrderSchema = (req, res, next) => {
   }
 };
 
-verifyUpdateOrderSchema = (req, res, next) => {
+const verifyUpdateOrderSchema = (req, res, next) => {
   const validation = validate(req.body, orderUpdateSchema);
   if (!validation.valid) {
     return res.status(errorMessages.requestBodyIncorrect.code).send(
@@ -28,7 +28,7 @@ verifyUpdateOrderSchema = (req, res, next) => {
   }
 };
 
-verifyReadOrderSchema = (req, res, next) => {
+const verifyReadOrderSchema = (req, res, next) => {
   const validation = validate(req.query, orderReadSchema);
   if (!validation.valid) {
     return res.status(errorMessages.invalidQueryParameters.code).send(
@@ -40,7 +40,7 @@ verifyReadOrderSchema = (req, res, next) => {
   }
 };
 
-verifyRaceCondition = (req, res, next) => {
+const verifyRaceCondition = (req, res, next) => {
   if (!req.params.orderId) {
     return res.status(errorMessages.missingOrderId.code).send(
       {

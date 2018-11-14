@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const queryParser = require('express-query-int');
 const {connectToDatabase} = require('./common/services/db-connection.service');
-const OrdersRouter = require('./orders/routes.config');
+const ordersRouter = require('./orders/routes.config');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const HTTP_SERVER_ERROR = 500;
@@ -19,7 +19,7 @@ connectToDatabase();
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PATCH,POST');
   res.header('Access-Control-Expose-Headers', 'Content-Length');
   res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range');
   res.header('Content-Type', 'application/json');
@@ -33,7 +33,7 @@ app.use(function (req, res, next) {
 app.use(bodyParser.json());
 app.use(queryParser());
 
-OrdersRouter.routesConfig(app);
+ordersRouter.routesConfig(app);
 
 app.use(function (err, req, res, next) {
   if (res.headersSent) {

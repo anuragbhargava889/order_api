@@ -6,7 +6,7 @@ const OrderModel = require('../models/orders.model');
  * @param req
  * @param res
  */
-createOrder = (req, res) => {
+const createOrder = (req, res) => {
   OrderModel.createOrder(req.body)
     .then((result) => {
       res.status(200).send(
@@ -30,9 +30,9 @@ createOrder = (req, res) => {
  * @param req
  * @param res
  */
-getAllOrders = (req, res) => {
-  const limit = req.query.limit && req.query.limit <= 100 ? parseInt(req.query.limit) : 10;
-  const page = req.query.page ? parseInt(req.query.page) : 1;
+const getAllOrders = (req, res) => {
+  const limit = req.query.limit ? (req.query.limit) : 10;
+  const page = req.query.page ? (req.query.page) : 1;
 
   OrderModel.listOrder(limit, page)
     .then((result) => {
@@ -55,7 +55,7 @@ getAllOrders = (req, res) => {
  * @param res
  * @returns {*}
  */
-patchOrderById = (req, res) => {
+const patchOrderById = (req, res) => {
   OrderModel.updateOrder(req.params.orderId, req.body)
     .then((result) => {
       res.status(200).send(

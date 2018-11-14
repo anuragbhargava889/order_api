@@ -66,24 +66,10 @@ const Order = mongoose.model('Orders', orderSchema);
 
 /**
  *
- * @param id
- * @returns {Promise}
- */
-findById = id => Order.findById(id)
-  .then((result) => {
-    result = result.toJSON();
-    delete result._id;
-    delete result.__v;
-    return result;
-  })
-  .catch(err => Promise.reject(err));
-
-/**
- *
  * @param orderData
  * @returns {Promise}
  */
-createOrder = async (orderData) => {
+const createOrder = async (orderData) => {
   try {
     const origin = orderData.origin.toString();
     const destination = orderData.destination.toString();
@@ -106,7 +92,7 @@ createOrder = async (orderData) => {
  * @param page
  * @returns {*}
  */
-listOrder = (perPage, page) => {
+const listOrder = (perPage, page) => {
   try {
     return Order.paginate({}, {select: 'id status distance', page, limit: perPage});
   }
@@ -121,7 +107,7 @@ listOrder = (perPage, page) => {
  * @param orderData
  * @returns {Promise<any>}
  */
-updateOrder = (id, orderData) => {
+const updateOrder = (id, orderData) => {
   try {
     return Order.findOneAndUpdate({_id: id}, orderData, {runValidators: true});
   }
@@ -135,7 +121,7 @@ updateOrder = (id, orderData) => {
  * @param id
  * @returns {*}
  */
-findOrderByID = (id) => {
+const findOrderByID = (id) => {
   try {
     return Order.findOne({_id: id}, 'status');
   }
@@ -145,7 +131,6 @@ findOrderByID = (id) => {
 };
 
 module.exports = {
-  findById,
   createOrder,
   updateOrder,
   findOrderByID,
