@@ -7,7 +7,7 @@ services:
     ports:
     - 8080:8080
     links:
-    - mongo
+    - order_mongo_db
 
   order_mongo_db:
     container_name: order_mongo_db
